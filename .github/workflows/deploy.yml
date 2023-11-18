@@ -14,12 +14,13 @@ name: Build and Deploy to Proen
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop","main" ]
     tags: [ 'v*.*.*' ]
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  CLUSTER_NAME: https://tcc-01.th1.proen.cloud/api/ 
 
 jobs:
   setup-build-publish-deploy:
@@ -39,8 +40,24 @@ jobs:
     - id: 'auth'
       name: 'Authenticate to Proen Cloud'
       run: |-
-        kubectl config set-cluster tcc-01 --server=https://tcc-01.th1.proen.cloud/api/ 
+        kubectl config set-cluster tcc-01 --server=${{ env.CLUSTER_NAME }} 
         kubectl config set-context  tcc-01 --cluster=tcc-01
-        kubectl config set-credentials tcc-01-user --token=$CLUSTER_TOKEN
+        kubectl config set-credentials tcc-01-user --token=${{ secrets.CLUSTER_TOKEN }}
         kubectl config set-context  tcc-01 --user=tcc-01-user
         kubectl config use-context  tcc-01
+
+    - name: Log into registry ${{ env.REGISTRY }}
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Pull Image'
+      run: |-
+        
+
+
+
+
