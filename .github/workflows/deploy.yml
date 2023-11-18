@@ -55,9 +55,6 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: 'Pull Image'
-      run: |-
-
 
 
 
