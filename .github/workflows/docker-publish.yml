@@ -20,7 +20,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     environment: production
     permissions:
@@ -73,7 +72,7 @@ jobs:
     needs: build
     if: ${{ github.ref == 'refs/heads/develop' && github.event_name == 'push' }}
     name: Set-version and Deploy
-    runs-on: mikefarah/yq:latest-githubaction
+    runs-on: ubuntu-latest
     environment: production
 
     permissions:
