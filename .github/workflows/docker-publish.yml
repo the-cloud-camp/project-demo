@@ -14,6 +14,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  HELLO_TEST: $HELLO_TEST
 
 
 jobs:
@@ -34,7 +35,7 @@ jobs:
 
       - name: echo valeues
         run: |-
-          echo "$HELLO_TEST"
+          echo "${{ env.HELLO_TEST }}"
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
