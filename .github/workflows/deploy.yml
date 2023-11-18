@@ -45,6 +45,7 @@ jobs:
         kubectl config set-credentials tcc-01-user --token=${{ secrets.CLUSTER_TOKEN }}
         kubectl config set-context  tcc-01 --user=tcc-01-user
         kubectl config use-context  tcc-01
+        kubectl get ns
 
     - name: Log into registry ${{ env.REGISTRY }}
       if: github.event_name != 'pull_request'
