@@ -33,7 +33,7 @@ jobs:
 
       - name: echo valeues
         run: |-
-          echo "${{ env.HELLO_TEST }}"
+          echo "$HELLO_TEST"
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
