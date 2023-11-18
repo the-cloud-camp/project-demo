@@ -6,13 +6,13 @@ metadata:
     name: 
 spec:
   rules:
-  - host: <Host>
+  - host: tcc-01.th1.proen.cloud
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
           service:
-            name: <Service>
+            name: kai-nuxtjs
             port: 
-              number: <Port>
+              number: 3000
