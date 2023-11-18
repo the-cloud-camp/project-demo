@@ -25,7 +25,7 @@ env:
 jobs:
   setup-build-publish-deploy:
     name: Set-version and Deploy
-    runs-on: public.ecr.aws/kubeopsskills/circleci:1.0.3-docker-aws
+    runs-on: mikefarah/yq:latest-githubaction
     environment: production
 
     permissions:
