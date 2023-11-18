@@ -20,6 +20,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: read
       packages: write
@@ -33,7 +34,7 @@ jobs:
 
       - name: echo valeues
         run: |-
-          echo "${{ HELLO_TEST }}"
+          echo "$HELLO_TEST"
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
