@@ -1,9 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: 
+  name: kai-nuxtjs
+  namespace: dev
   labels:
-    name: 
+    name: kai-nuxtjs
 spec:
   rules:
   - host: tcc-01.th1.proen.cloud
