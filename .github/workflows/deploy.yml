@@ -1,0 +1,46 @@
+# This workflow will build a docker container, publish it to Google Container Registry, and deploy it to GKE when there is a push to the "main" branch.
+#
+# To configure this workflow:
+#
+# 1. Ensure that your repository contains the necessary configuration for your Google Kubernetes Engine cluster, including deployment.yml, kustomization.yml, service.yml, etc.
+#
+# 2. Create and configure a Workload Identity Provider for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
+#
+# 3. Change the values for the GAR_LOCATION, GKE_ZONE, GKE_CLUSTER, IMAGE, REPOSITORY and DEPLOYMENT_NAME environment variables (below).
+#
+# For more support on how to run the workflow, please visit https://github.com/google-github-actions/setup-gcloud/tree/master/example-workflows/gke-kustomize
+
+name: Build and Deploy to Proen
+
+on:
+  push:
+    branches: [ "develop" ]
+    tags: [ 'v*.*.*' ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  setup-build-publish-deploy:
+    name: Set-version and Deploy
+    runs-on: public.ecr.aws/kubeopsskills/circleci:1.0.3-docker-aws
+    environment: production
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Configure Workload Identity Federation and generate an access token.
+    - id: 'auth'
+      name: 'Authenticate to Proen Cloud'
+      run: |-
+        kubectl config set-cluster tcc-01 --server=https://tcc-01.th1.proen.cloud/api/ 
+        kubectl config set-context  tcc-01 --cluster=tcc-01
+        kubectl config set-credentials tcc-01-user --token=$CLUSTER_TOKEN
+        kubectl config set-context  tcc-01 --user=tcc-01-user
+        kubectl config use-context  tcc-01
