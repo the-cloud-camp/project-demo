@@ -108,4 +108,5 @@ jobs:
     - name: Update image from registry
       run: |-
         export IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
-        yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
+        echo "$IMAGE_TAG"
+        #yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
