@@ -101,6 +101,12 @@ jobs:
 
     - name: Update image from registry
       run: |-
+        wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
+        chmod +x /usr/bin/yq
         export IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
         echo "$IMAGE_TAG"
-        #yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
+        yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
+
+    - name: Apply to cluster
+      run: |-
+        kubectl apply -f manifest/${{ vars.ENV }}
