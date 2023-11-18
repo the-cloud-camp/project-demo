@@ -35,7 +35,7 @@ jobs:
       - name: echo valeues
         run: |-
           echo "${{ vars.HELLO_TEST }}"
-          echo "${{ secret.CLUSTER_TOKEN }}"
+          echo "${{ secrets.CLUSTER_TOKEN }}"
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
