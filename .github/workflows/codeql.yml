@@ -2,9 +2,6 @@ name: '🚓 CodeQL Analysis'
 # Only run on schedule and PR because it's really slow
 
 on:
-  pull_request:
-    branches:
-    - develop
   push:
     branches: [ "feature/*" ]
   schedule:
