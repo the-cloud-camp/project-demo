@@ -78,7 +78,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/develop' && github.event_name == 'push' }}
     name: Set-version and Deploy
     runs-on: ubuntu-latest
-    environment: production
+    environment: dev
 
     permissions:
       contents: 'read'
