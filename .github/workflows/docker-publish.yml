@@ -105,6 +105,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Pull image from registry
+    - name: Update image from registry
       run: |-
-        docker pull ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+        export IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}
+        yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
