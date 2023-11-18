@@ -16,6 +16,7 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
+  CLUSTER_NAME: https://tcc-02.th1.proen.cloud/api/
 
 
 jobs:
