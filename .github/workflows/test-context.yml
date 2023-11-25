@@ -4,7 +4,7 @@ name: "🚓 Test Context"
 on:
   push:
     branches: 
-      - "feature*"
+      - 'feature/**'
   workflow_dispatch: # allow manual runs
 
 jobs:
