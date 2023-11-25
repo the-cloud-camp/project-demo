@@ -21,3 +21,4 @@ jobs:
             echo "HELLO=hello" >> $GITHUB_ENV
             source $GITHUB_ENV
             echo "$HELLO"
+            echo "${{ github.base_ref }}"
