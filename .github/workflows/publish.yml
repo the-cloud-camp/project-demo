@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: ⭐️ Build and Deploy
+=======
+name: Build and Deploy
+>>>>>>> 987c5943804d19ccb53935392798a7cb1b6e4d51
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
