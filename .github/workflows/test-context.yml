@@ -16,7 +16,7 @@ jobs:
       security-events: write
 
     steps:
-      - name: Context Show
+      - name: Context Show hello
         run: |
             echo "HELLO=hello" >> $GITHUB_ENV
             source $GITHUB_ENV
