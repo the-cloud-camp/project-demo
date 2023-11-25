@@ -3,7 +3,8 @@ name: "🚓 Test Context"
 
 on:
   push:
-    branches: [ "feature/^" ]
+    branches: 
+      - "feature*"
   workflow_dispatch: # allow manual runs
 
 jobs:
