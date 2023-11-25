@@ -16,7 +16,8 @@ jobs:
       security-events: write
 
     steps:
-      - name: Checkout repository
+      - name: Context Show
         run: |
             echo "HELLO=hello" >> $GITHUB_ENV
-            echo $HELLO
+            source $GITHUB_ENV
+            echo "$HELLO"
