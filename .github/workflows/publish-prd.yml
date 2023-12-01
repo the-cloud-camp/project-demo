@@ -99,10 +99,6 @@ jobs:
       - name: Set Image Tag
         working-directory: tcc-k8s-config
         run: |
-          # Change to the directory where the other repository was cloned
-          cd tcc-k8s-config
-          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
-          chmod +x /usr/bin/yq
           export IMAGE_RETAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.tagging.outputs.image_tag }}
           echo "$IMAGE_RETAG"
           yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_RETAG) ' kai-nuxtjs/deployment.yaml
