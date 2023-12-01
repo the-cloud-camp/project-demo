@@ -39,6 +39,7 @@ jobs:
           echo "previous_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
 
   tagging:
+    needs: checkout_image
     runs-on: ubuntu-latest
     environment: prod
     permissions:
