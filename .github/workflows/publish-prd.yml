@@ -23,15 +23,13 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Clone nonprod repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: 'the-cloud-camp/tcc-k8s-config-nonprd'
           token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
           path: 'tcc-k8s-config-nonprd'
+          ref: main
 
       - name: Get Image Tag
         run: |
@@ -92,15 +90,13 @@ jobs:
       id-token: write  
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Clone nonprod repository
         uses: actions/checkout@v3
         with:
           repository: 'the-cloud-camp/tcc-k8s-config'
           token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
           path: 'tcc-k8s-config'
+          ref: main
       
       - name: Set Image Tag
         working-directory: tcc-k8s-config
