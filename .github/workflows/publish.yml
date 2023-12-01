@@ -103,8 +103,8 @@ jobs:
       id-token: 'write'
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    # - name: Checkout
+    #   uses: actions/checkout@v3
     
     # - name: Checkout Kubernetes Configuration Repository
     #   run: |
@@ -121,6 +121,7 @@ jobs:
         repository: 'the-cloud-camp/tcc-k8s-config-nonprod'
         token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
         path: 'tcc-k8s-config-nonprod'
+        ref: main
 
     - name: Deploy microservice
       working-directory: tcc-k8s-config-nonprd
