@@ -2,7 +2,7 @@ name: "🔥 Release Production Tag"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -14,7 +14,7 @@ jobs:
   checkout_image:
     runs-on: ubuntu-latest
     outputs:
-      image_tag: ${{ steps.get_pre_image_tag.outputs.previous_image_tag }}
+      previous_image_tag: ${{ steps.get_pre_image_tag.outputs.previous_image_tag }}
     environment: prod
     permissions:
       contents: read
@@ -25,9 +25,9 @@ jobs:
       - name: Clone nonprod repository
         uses: actions/checkout@v3
         with:
-          repository: 'the-cloud-camp/tcc-k8s-config-nonprd'
-          token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
-          path: 'tcc-k8s-config-nonprd'
+          repository: "the-cloud-camp/tcc-k8s-config-nonprd"
+          token: ${{ secrets.GH_PAT }} # Use your PAT for private repositories
+          path: "tcc-k8s-config-nonprd"
           ref: main
 
       - name: Get Image Tag
@@ -37,7 +37,7 @@ jobs:
           PREVIOUS_TAG=$(yq e '.spec.template.spec.containers[0].image' kai-nuxtjs/deployment.yaml | cut -d ':' -f 2)
           echo "$PREVIOUS_TAG"
           echo "previous_image_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
-          
+
   tagging:
     runs-on: ubuntu-latest
     environment: prod
@@ -64,7 +64,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        
+
       - name: Retag Image
         run: |
           original_tag=${{ needs.checkout_image.outputs.previous_image_tag }}
