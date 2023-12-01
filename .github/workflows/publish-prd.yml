@@ -32,12 +32,10 @@ jobs:
           ref: main
 
       - name: Get Image Tag
+        working-directory: tcc-k8s-config-nonprd
         run: |
-          # Change to the directory where the other repository was cloned
-          cd tcc-k8s-config-nonprd
           previous_image_tag=$(yq e '.spec.template.spec.containers[0].image' kai-nuxtjs/deployment.yaml | cut -d ':' -f 2)
-          echo "previous_image_tag=$previous_image_tag" >> $GITHUB_ENV
-          echo "::set-output name=previous_image_tag::$previous_image_tag"  # Set step output
+          echo "previous_image_tag=$previous_image_tag" >> $GITHUB_OUTPUT
           
   tagging:
     runs-on: ubuntu-latest
