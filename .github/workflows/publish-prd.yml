@@ -29,9 +29,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Cat version
+        id: meta
         run: |-
           cat package.json | jq -r .version
           echo "image_tag=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
+          echo $image_tag
 
   set_version_image:     
     runs-on: ubuntu-latest
@@ -55,7 +57,7 @@ jobs:
       - name: Set Image Tag
         working-directory: tcc-k8s-config
         run: |
-          export IMAGE_RETAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.tagging.outputs.image_tag }}
+          export IMAGE_RETAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.checkout_tag_image.outputs.image_tag }}
           echo "$IMAGE_RETAG"
           yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_RETAG) ' kai-nuxtjs/deployment.yaml
 
