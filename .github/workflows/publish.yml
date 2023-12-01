@@ -133,7 +133,7 @@ jobs:
       run: |-
         wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
         chmod +x /usr/bin/yq
-        export IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
+        export IMAGE_TAG=${{ needs.build.outputs.image_tag }}
         echo "$IMAGE_TAG"
         yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' kai-nuxtjs/deployment.yaml
     
