@@ -5,31 +5,29 @@ name: '⭐️ Build and Deploy'
 # separate terms of service, privacy policy, and support
 # documentation.
 
-# on:
-#   push:
-#     branches: [ "develop" ]
-#   pull_request:
-#     branches: [ "develop" ]
-
 on:
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'build image'
-        required: true
-        default: 'build'
-        type: choice
-        options:
-        - push
-        - deploy
-      tags:
-        description: 'Test scenario tags'
-        required: false
-        type: boolean
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
+  push:
+    branches: [ "develop" ]
+
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       logLevel:
+#         description: 'build image'
+#         required: true
+#         default: 'build'
+#         type: choice
+#         options:
+#         - push
+#         - deploy
+#       tags:
+#         description: 'Test scenario tags'
+#         required: false
+#         type: boolean
+#       environment:
+#         description: 'Environment to run tests against'
+#         type: environment
+#         required: true
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -107,26 +105,41 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+    
+    # - name: Checkout Kubernetes Configuration Repository
+    #   run: |
+    #     apt install --no-cache git bash
+    #     git clone https://creampxxz:${{ secrets.GH_PAT }}@github.com/the-cloud-camp/tcc-k8s-config-nonprd.git
+    #     cd tcc-k8s-config-nonprd
+    #     git switch main
+    #     git fetch -p
+    #     git pull origin main
 
-    # Configure Workload Identity Federation and generate an access token.
-    - id: 'auth'
-      name: 'Authenticate to Proen Cloud'
-      run: |-
-        kubectl config set-cluster tcc-01 --server=${{ env.CLUSTER_NAME }} 
-        kubectl config set-context  tcc-01 --cluster=tcc-01
-        kubectl config set-credentials tcc-01-user --token=${{ secrets.CLUSTER_TOKEN }}
-        kubectl config set-context  tcc-01 --user=tcc-01-user
-        kubectl config use-context  tcc-01
-        kubectl get ns
+    - name: Clone nonprod repository
+      uses: actions/checkout@v2
+      with:
+        repository: 'the-cloud-camp/tcc-k8s-config-nonprod'
+        token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
+        path: 'tcc-k8s-config-nonprod'
+
+    - name: Deploy microservice
+      working-directory: tcc-k8s-config-nonprd
+      run: |
+        echo "${{ needs.build.outputs.image_tag }}"
 
     - name: Update image from registry
+      working-directory: tcc-k8s-config-nonprd
       run: |-
         wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq &&\
         chmod +x /usr/bin/yq
         export IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
         echo "$IMAGE_TAG"
-        yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' manifest/${{ vars.ENV }}/deployment.yaml
-
-    - name: Apply to cluster
+        yq -i '.spec.template.spec.containers[0].image = strenv(IMAGE_TAG) ' kai-nuxtjs/deployment.yaml
+    
+    - name: Update repository
+      working-directory: tcc-k8s-config-nonprd
       run: |-
-        kubectl apply -f manifest/${{ vars.ENV }}
+        git config --global user.email "support@dependabot.com"
+        git config --global user.name "dependabot[bot]"
+        git commit -am "release ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}"
+        git push origin main
