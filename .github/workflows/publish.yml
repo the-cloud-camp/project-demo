@@ -115,12 +115,12 @@ jobs:
     #     git fetch -p
     #     git pull origin main
 
-    - name: Clone nonprod repository
+    - name: Clone nonprd repository
       uses: actions/checkout@v3
       with:
-        repository: 'the-cloud-camp/tcc-k8s-config-nonprod'
+        repository: 'the-cloud-camp/tcc-k8s-config-nonprd'
         token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
-        path: 'tcc-k8s-config-nonprod'
+        path: 'tcc-k8s-config-nonprd'
         ref: main
 
     - name: Deploy microservice
