@@ -14,7 +14,7 @@ jobs:
   checkout_image:
     runs-on: ubuntu-latest
     outputs:
-      previous_image_tag: ${{ steps.get_pre_image_tag.outputs.previous_image_tag }}
+      previous_tag: ${{ steps.meta.outputs.previous_tag }}
     environment: prod
     permissions:
       contents: read
@@ -31,12 +31,12 @@ jobs:
           ref: main
 
       - name: Get Image Tag
-        id: get_pre_image_tag
+        shell: bash
+        id: meta
         working-directory: tcc-k8s-config-nonprd
         run: |
           PREVIOUS_TAG=$(yq e '.spec.template.spec.containers[0].image' kai-nuxtjs/deployment.yaml | cut -d ':' -f 2)
-          echo "$PREVIOUS_TAG"
-          echo "previous_image_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
+          echo "previous_tag=$PREVIOUS_TAG" >> "$GITHUB_OUTPUT"
 
   tagging:
     runs-on: ubuntu-latest
@@ -67,9 +67,9 @@ jobs:
 
       - name: Retag Image
         run: |
-          original_tag=${{ needs.checkout_image.outputs.previous_image_tag }}
+          export original_tag="${{ needs.checkout_image.outputs.previous_tag }}"
           source $GITHUB_ENV
-          new_tag=$IMAGE_TAG  # Define your new tag here
+          export new_tag=$IMAGE_TAG
 
           # Assuming you are using Docker
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$original_tag
