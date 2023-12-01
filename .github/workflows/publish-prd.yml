@@ -32,7 +32,7 @@ jobs:
         id: meta
         run: |-
           cat package.json | jq -r .version
-          echo "image_tag=$(cat package.json | jq -r .version)" >> $GITHUB_ENV
+          echo "image_tag=$(cat package.json | jq -r .version)" >> "$GITHUB_OUTPUT"
           echo $image_tag
 
   set_version_image:     
@@ -67,5 +67,5 @@ jobs:
         run: |-
           git config --global user.email "support@dependabot.com"
           git config --global user.name "dependabot[bot]"
-          git commit -am "release ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.tagging.outputs.image_tag }}"
+          git commit -am "release ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.checkout_tag_image.outputs.image_tag }}"
           git push origin main
