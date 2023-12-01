@@ -116,7 +116,7 @@ jobs:
     #     git pull origin main
 
     - name: Clone nonprod repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: 'the-cloud-camp/tcc-k8s-config-nonprod'
         token: ${{ secrets.GH_PAT }}  # Use your PAT for private repositories
